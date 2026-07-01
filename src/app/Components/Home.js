@@ -149,12 +149,9 @@ function Home() {
       }
     };
 
-    const page = document.querySelector('.oh-page');
     const revealItems = Array.from(document.querySelectorAll('.oh-reveal'));
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let revealObserver;
-
-    page?.classList.add('oh-reveal-ready');
 
     if (prefersReducedMotion) {
       revealItems.forEach((item) => item.classList.add('oh-reveal--visible'));
@@ -184,12 +181,11 @@ function Home() {
       window.removeEventListener('scroll', handleScroll);
       clearTimeout(timer);
       revealObserver?.disconnect();
-      page?.classList.remove('oh-reveal-ready');
     };
   }, []);
 
   return (
-    <div className={`oh-page ${menuOpen ? 'menu-is-open' : ''}`}>
+    <div className={`oh-page oh-reveal-ready ${menuOpen ? 'menu-is-open' : ''} ${!isLoading ? 'oh-page--loaded' : ''}`}>
       {isLoading && (
         <div className="oh-preloader">
           <div className="oh-preloader-content">
@@ -247,22 +243,22 @@ function Home() {
 
         {/* ---- Hero copy ---- */}
         <div className="oh-hero__inner">
-          <span className="oh-pill">
+          <span className="oh-pill oh-hero__reveal oh-hero__reveal--1">
             <LeafTag size={14} color="#FAF7EE" />
           ROOTED IN NATURE CRAFTED FOR EVERYDAY LIVING
           </span>
 
-          <h1 className="oh-hero__title" >
+          <h1 className="oh-hero__title oh-hero__reveal oh-hero__reveal--2" >
             Welcome To<br />
             Organic <span style={{color:"#DCC9A3"}} className="oh-heritage-text">Heritage</span>
           </h1>
 
-          <p className="oh-hero__sub">
+          <p className="oh-hero__sub oh-hero__reveal oh-hero__reveal--3">
             From wholesome grains to natural self-care, we bring you products
             that are pure,authentic, and crafted with care.
           </p>
 
-          <div className="oh-hero__ctas">
+          <div className="oh-hero__ctas oh-hero__reveal oh-hero__reveal--4">
             <a href="#grains" className="oh-btn oh-btn--solid">
               Explore Grains
               <ArrowRight size={16} color="#FAF7EE" />
