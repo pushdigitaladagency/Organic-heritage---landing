@@ -149,12 +149,42 @@ function Home() {
       }
     };
 
+    const page = document.querySelector('.oh-page');
+    const revealItems = Array.from(document.querySelectorAll('.oh-reveal'));
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let revealObserver;
+
+    page?.classList.add('oh-reveal-ready');
+
+    if (prefersReducedMotion) {
+      revealItems.forEach((item) => item.classList.add('oh-reveal--visible'));
+    } else {
+      revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('oh-reveal--visible');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          rootMargin: '0px 0px -12% 0px',
+          threshold: 0.15,
+        }
+      );
+
+      revealItems.forEach((item) => revealObserver.observe(item));
+    }
+
     window.addEventListener('scroll', handleScroll);
     handleScroll();
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
       clearTimeout(timer);
+      revealObserver?.disconnect();
+      page?.classList.remove('oh-reveal-ready');
     };
   }, []);
 
@@ -246,11 +276,11 @@ function Home() {
       {/* ============ GRAINS SECTION (image left, content right) ============ */}
       <section className="oh-split oh-split--grains" id="grains">
         <div className="oh-split__container">
-          <div className="oh-split__media oh-split__media--left"id='left'>
+          <div className="oh-split__media oh-split__media--left oh-reveal oh-reveal--from-left"id='left'>
             <div className="oh-split__mediaInner oh-split__mediaInner--grains" />
           </div>
 
-          <div className="oh-split__content">
+          <div className="oh-split__content oh-reveal oh-reveal--from-right">
             <div className="oh-eyebrow">
               <span className="oh-eyebrow__rule" />
               <span className="oh-eyebrow__text">two worlds, one heritage</span>
@@ -282,7 +312,7 @@ function Home() {
       {/* ============ COSMETICS SECTION (content left, image right) ============ */}
       <section className="oh-split oh-split--cosmetics" id="cosmetics">
         <div className="oh-split__container">
-          <div className="oh-split__content oh-split__content--left">
+          <div className="oh-split__content oh-split__content--left oh-reveal oh-reveal--from-left">
             <h2 className="oh-h2" id='h2-margin' > Organic Heritage  Cosmetics</h2>
 
             <p className="oh-split__lede" id='oh-pading'>
@@ -304,7 +334,7 @@ function Home() {
             </a>
           </div>
 
-          <div className="oh-split__media oh-split__media--right"id='right'>
+          <div className="oh-split__media oh-split__media--right oh-reveal oh-reveal--from-right"id='right'>
             <div className="oh-split__mediaInner oh-split__mediaInner--cosmetics" />
           </div>
         </div>
@@ -313,11 +343,11 @@ function Home() {
       {/* ============ PHILOSOPHY ============ */}
       <section className="oh-philo" id="story">
         <div className="oh-philo__container">
-          <div className="oh-philo__media">
+          <div className="oh-philo__media oh-reveal oh-reveal--from-left">
             <div className="oh-philo__mediaInner" />
           </div>
 
-          <div className="oh-philo__content">
+          <div className="oh-philo__content oh-reveal oh-reveal--from-right">
             <div className="oh-eyebrow">
               <span className="oh-eyebrow__rule2" />
               <span className="oh-eyebrow__text2">Our Philosophy</span>
@@ -334,15 +364,15 @@ function Home() {
             </p>
 
             <div className="oh-philo__cards">
-              <article className="oh-philo__card">
+              <article className="oh-philo__card oh-reveal oh-reveal--stagger-1">
                 <h3>Natural</h3>
                 <p>Made with pure and naturally sourced ingredients.</p>
               </article>
-              <article className="oh-philo__card">
+              <article className="oh-philo__card oh-reveal oh-reveal--stagger-2">
                 <h3>Ethical</h3>
                 <p>Responsibly sourced with care and transparency.</p>
               </article>
-              <article className="oh-philo__card">
+              <article className="oh-philo__card oh-reveal oh-reveal--stagger-3">
                 <h3>Sustainable</h3>
                 <p>Supports Eco-friendly and sustainable methods.</p>
               </article>
@@ -354,31 +384,31 @@ function Home() {
       {/* ============ WHY CHOOSE — Dark band ============ */}
       <section className="oh-why" id="sustain">
         <div className="oh-why__container">
-          <h2 className="oh-why__title">Why choose Organic Heritage?</h2>
+          <h2 className="oh-why__title oh-reveal">Why choose Organic Heritage?</h2>
 
           <div className="oh-why__grid">
-            <article className="oh-why__card">
+            <article className="oh-why__card oh-reveal oh-reveal--stagger-1">
                 <img src="/images/branch.png" alt="Organic" className="branch" />
                <img src="/images/leaf 11.png" alt="Organic Heritage" className="svg" />
               <h3>Pure &amp; Authentic</h3>
               <p>Carefully sourced ingredients with minimal Processing Traditional wisdom.</p>
             </article>
 
-            <article className="oh-why__card">
+            <article className="oh-why__card oh-reveal oh-reveal--stagger-2">
                <img src="/images/branch.png" alt="Organic" className="branch" />
             <img src="/images/bowl.png" alt="Organic Heritage" className=".oh-why__icon svg" />
               <h3>Traditional Wisdom</h3>
               <p>Products inspired by generations of natural living, sustainable approach.</p>
             </article>
 
-            <article className="oh-why__card">
+            <article className="oh-why__card oh-reveal oh-reveal--stagger-3">
               <img src="/images/branch.png" alt="Organic" className="branch" />
              <img src="/images/stem.png" alt="Organic Heritage" className=".oh-why__icon svg" />
               <h3>Sustainable Approach</h3>
               <p>Supporting framers, Natures, and Responsible production.</p>
             </article>
 
-            <article className="oh-why__card">
+            <article className="oh-why__card oh-reveal oh-reveal--stagger-4">
                <img src="/images/branch.png" alt="Organic" className="branch" />
                <img src="/images/medal.png" alt="Organic Heritage" className=".oh-why__icon svg" />
               <h3>Quality Assured</h3>
@@ -391,7 +421,7 @@ function Home() {
       {/* ============ FEATURED CATEGORIES ============ */}
       <section className="oh-feat">
         <div className="oh-feat__container">
-          <header className="oh-feat__header">
+          <header className="oh-feat__header oh-reveal">
             <div className="oh-eyebrow" id='fea'>
               <span className="oh-eyebrow__rule" />
               <span className="oh-eyebrow__text">Featured</span>
@@ -401,21 +431,21 @@ function Home() {
 
           <div className="oh-feat__grid">
             {/* Grains card */}
-            <article className="oh-feat__card oh-feat__card--green">
+            <article className="oh-feat__card oh-feat__card--green oh-reveal oh-reveal--from-left">
               <div className="oh-feat__products">
-                <div className="oh-feat__product">
+                <div className="oh-feat__product oh-reveal oh-reveal--stagger-1">
                   <div className="oh-feat__productImg oh-feat__productImg--g1" />
                   <span className="oh-feat__productLabel">Karuppu Kavuni Rice</span>
                 </div>
-                <div className="oh-feat__product">
+                <div className="oh-feat__product oh-reveal oh-reveal--stagger-2">
                   <div className="oh-feat__productImg oh-feat__productImg--g2"/>
                   <span className="oh-feat__productLabel">Millets</span>
                 </div>
-                <div className="oh-feat__product">
+                <div className="oh-feat__product oh-reveal oh-reveal--stagger-3">
                   <div className="oh-feat__productImg oh-feat__productImg--g3" />
                   <span className="oh-feat__productLabel">Traditional Rice</span>
                 </div>
-                <div className="oh-feat__product">
+                <div className="oh-feat__product oh-reveal oh-reveal--stagger-4">
                   <div className="oh-feat__productImg oh-feat__productImg--g4" />
                   <span className="oh-feat__productLabel">Pulses</span>
                 </div>
@@ -425,21 +455,21 @@ function Home() {
             </article>
 
             {/* Cosmetics card */}
-            <article className="oh-feat__card oh-feat__card--sandal">
+            <article className="oh-feat__card oh-feat__card--sandal oh-reveal oh-reveal--from-right">
               <div className="oh-feat__products">
-                <div className="oh-feat__product">
+                <div className="oh-feat__product oh-reveal oh-reveal--stagger-1">
                   <div className="oh-feat__productImg oh-feat__productImg--c1" />
                   <span className="oh-feat__productLabel">Lip Care</span>
                 </div>
-                <div className="oh-feat__product">
+                <div className="oh-feat__product oh-reveal oh-reveal--stagger-2">
                   <div className="oh-feat__productImg oh-feat__productImg--c2" />
                   <span className="oh-feat__productLabel">Skin Care</span>
                 </div>
-                <div className="oh-feat__product">
+                <div className="oh-feat__product oh-reveal oh-reveal--stagger-3">
                   <div className="oh-feat__productImg oh-feat__productImg--c3" />
                   <span className="oh-feat__productLabel">Hair Care</span>
                 </div>
-                <div className="oh-feat__product">
+                <div className="oh-feat__product oh-reveal oh-reveal--stagger-4">
                   <div className="oh-feat__productImg oh-feat__productImg--c4" />
                   <span className="oh-feat__productLabel">Hygiene</span>
                 </div>
@@ -459,7 +489,7 @@ function Home() {
 
         <div className="oh-foot__container">
           {/* Brand & newsletter */}
-          <div className="oh-foot__brand">
+          <div className="oh-foot__brand oh-reveal oh-reveal--stagger-1">
             <div className="oh-foot__logo">
               <div className="oh-header__logoMark oh-header__logoMark--dark">
                 {/* <span>O</span><i>H</i> */}
@@ -484,7 +514,7 @@ function Home() {
           </div>
 
           {/* Quick links */}
-          <div className="oh-foot__col">
+          <div className="oh-foot__col oh-reveal oh-reveal--stagger-2">
             <h4 className="oh-foot__heading inter-font">Quick links</h4>
             <ul className="oh-foot__list">
               <li><a href="#grains">About Us</a></li>
@@ -495,7 +525,7 @@ function Home() {
           </div>
 
           {/* Get in touch */}
-          <div className="oh-foot__col">
+          <div className="oh-foot__col oh-reveal oh-reveal--stagger-3">
             <h4 className="oh-foot__heading inter-font">Get in touch</h4>
             <ul className="oh-foot__list oh-foot__list--touch">
               <li className='icon'>
@@ -516,7 +546,7 @@ Tamil Nadu, INDIA.</span>
           </div>
 
           {/* Last column */}
-          <div className="oh-foot__col">
+          <div className="oh-foot__col oh-reveal oh-reveal--stagger-4">
             <h4 className="oh-foot__heading1 inter-font">Follow us</h4>
             <div className="oh-foot__social">
               <a href="#" aria-label="Facebook" className="oh-foot__socialBtn"><FacebookIcon /></a>
