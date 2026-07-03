@@ -429,9 +429,13 @@ function Home() {
             {/* Grains card */}
             <article className="oh-feat__card oh-feat__card--green oh-reveal oh-reveal--from-left">
               <div className="oh-feat__products">
+                
                 <div className="oh-feat__product oh-reveal oh-reveal--stagger-1">
-                  <div className="oh-feat__productImg oh-feat__productImg--g1" />
-                  <span className="oh-feat__productLabel">Karuppu Kavuni Rice</span>
+                <a href ="https://organicheritage.store/grains/product/karuppu-kavuni-rice">
+                  <div className="oh-feat__productImg oh-feat__productImg--g1"  />
+                   
+                  <span className="oh-feat__productLabel" > Karuppu Kavuni Rice</span></a>
+                  
                 </div>
                 <div className="oh-feat__product oh-reveal oh-reveal--stagger-2">
                   <div className="oh-feat__productImg oh-feat__productImg--g2"/>

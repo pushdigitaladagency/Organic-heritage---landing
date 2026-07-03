@@ -276,7 +276,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url("/images/hero.jpg");
+  /* background-image: url("/images/hero.jpg"); */
   background-size: cover;
   background-position: center;
   opacity: 1;
@@ -2406,7 +2406,8 @@ gap: calc(15px * var(--oh-scale));
         margin-left: 31px;
     }
     #right{
-     margin-top: 78px;
+     margin-top: -97px;
+     pointer-events: none;
     }
 /* #left{
      margin-top: -46px;
@@ -2535,10 +2536,12 @@ gap: calc(15px * var(--oh-scale));
     inset: 0;
   }
 
- .oh-split {
-        margin-top: -175px;
+  .oh-split {
        padding: 22px 0
     }
+  .oh-split--grains {
+      margin-top: -175px;
+  }
 
   .oh-split__container {
     grid-template-columns: 1fr !important;
@@ -2552,6 +2555,12 @@ gap: calc(15px * var(--oh-scale));
     order: -1;
   }
 
+  .oh-split--grains .oh-split__container {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+  }
+
 
       .oh-split__media {
         border-radius: 16px;
@@ -2561,6 +2570,13 @@ gap: calc(15px * var(--oh-scale));
         position: absolute;
         height: 79vw !important;
     }
+
+  .oh-split--grains .oh-split__media {
+    position: relative;
+    width: 82%;
+    height: 76vw !important;
+    margin: 0 auto 28px;
+  }
 
   .oh-split__mediaInner--grains,
   .oh-split__mediaInner--cosmetics {
@@ -2593,6 +2609,16 @@ gap: calc(15px * var(--oh-scale));
         font-size: 15px;
         text-align: left;
     }
+
+  .oh-split--grains .oh-split__lede {
+    margin-bottom: 24px;
+  }
+
+  .oh-split--grains .oh-btn--wide {
+    position: relative;
+    z-index: 20;
+    pointer-events: auto;
+  }
 #oh-pading{
          margin-top: 16px;
 }
@@ -2618,7 +2644,7 @@ gap: calc(15px * var(--oh-scale));
     padding: 60px 0;
   }
   #left{
-    margin-top:-46px;
+    margin-top: 14px;
   }
 
   .oh-philo__container {
@@ -2779,7 +2805,7 @@ gap: calc(15px * var(--oh-scale));
         max-width: none !important;
     }
   #h2-margin{
-    margin-top: 167px;
+    margin-top: 0px;
   }
 
      .oh-feat__grid {
