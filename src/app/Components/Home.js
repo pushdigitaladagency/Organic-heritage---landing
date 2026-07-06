@@ -5,6 +5,29 @@ import './Home.css';
 import Link from "next/link";
 import { useRef, useEffect } from 'react';
 
+const PRELOADER_SESSION_KEY = 'organicHeritagePreloaderShown';
+let preloaderShownInMemory = false;
+
+function shouldShowPreloader() {
+  if (preloaderShownInMemory) {
+    return false;
+  }
+
+  try {
+    if (window.sessionStorage.getItem(PRELOADER_SESSION_KEY) === 'true') {
+      preloaderShownInMemory = true;
+      return false;
+    }
+
+    window.sessionStorage.setItem(PRELOADER_SESSION_KEY, 'true');
+  } catch {
+    // If sessionStorage is unavailable, still avoid repeating during this app session.
+  }
+
+  preloaderShownInMemory = true;
+  return true;
+}
+
 /* ------------------------------------------------------------------ */
 /*  Inline SVG icon set (replaces external icons so build is portable) */
 /* ------------------------------------------------------------------ */
@@ -124,13 +147,21 @@ const CloseIcon = ({ size = 24, color = 'currentColor' }) => (
 function Home() {
     const [menuOpen, setMenuOpen] = React.useState(false);
     const [isScrolled, setIsScrolled] = React.useState(false);
-    const [isLoading, setIsLoading] = React.useState(true);
+    const [isLoading, setIsLoading] = React.useState(null);
     const videoRef = useRef(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    let timer;
+    const showPreloader = shouldShowPreloader();
+
+    if (showPreloader) {
+      setIsLoading(true);
+      timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    } else {
       setIsLoading(false);
-    }, 2000);
+    }
 
     if (videoRef.current) {
       // Set speed to 0.5x for a slow-motion background effect
@@ -179,13 +210,15 @@ function Home() {
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      clearTimeout(timer);
+      if (timer) {
+        clearTimeout(timer);
+      }
       revealObserver?.disconnect();
     };
   }, []);
 
   return (
-    <div className={`oh-page oh-reveal-ready ${menuOpen ? 'menu-is-open' : ''} ${!isLoading ? 'oh-page--loaded' : ''}`}>
+    <div className={`oh-page oh-reveal-ready ${menuOpen ? 'menu-is-open' : ''} ${isLoading === false ? 'oh-page--loaded' : ''}`}>
       {isLoading && (
         <div className="oh-preloader">
           <div className="oh-preloader-content">
@@ -297,10 +330,10 @@ function Home() {
               <li style={{color:"#66442C"}}> Farm-To-Table Quality</li>
             </ul>
 
-            <a href="/grains" className="oh-btn oh-btn--solid oh-btn--wide" style={{ color: 'white' }}>
+            <Link href="/grains" className="oh-btn oh-btn--solid oh-btn--wide" style={{ color: 'white' }}>
               Visit Grains Collection
               <ArrowRight size={16} color="white" />
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -324,10 +357,10 @@ function Home() {
               <li style={{color:"#66442C"}}> Inspired by Traditional Care</li>
             </ul>
 
-            <a href="/cosmetics" className="oh-btn oh-btn--solid oh-btn--wide" style={{ color: 'white' }}>
+            <Link href="/cosmetics" className="oh-btn oh-btn--solid oh-btn--wide" style={{ color: 'white' }}>
               Visit Cosmetics Collection
               <ArrowRight size={16} color="#FAF7EE" />
-            </a>
+            </Link>
           </div>
 
           <div className="oh-split__media oh-split__media--right oh-reveal oh-reveal--from-right"id='right'>
